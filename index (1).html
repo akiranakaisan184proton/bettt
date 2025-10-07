@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Comece a Jogar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      background: #000;
+    }
+
+    /* Vídeo de fundo */
+    .video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Overlay escuro sobre o vídeo */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    /* Container principal */
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Telas */
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Card de conteúdo */
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      width: 100%;
+    }
+
+    /* Textos */
+    h1 {
+      font-size: 24px;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: #10b981;
+      font-weight: bold;
+    }
+
+    /* Formulário */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e5e5e5;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    /* Botões */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Aviso de bônus */
+    .bonus-alert {
+      background: #fef3c7;
+      border: 2px solid #fbbf24;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .bonus-alert p {
+      color: #92400e;
+      font-size: 14px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* QR Code */
+    .qr-container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .qr-code {
+      width: 250px;
+      height: 250px;
+      background: #f3f4f6;
+      border: 3px solid #10b981;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Timer */
+    .timer {
+      background: #1f2937;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Ícone de análise */
+    .analysis-icon {
+      width: 80px;
+      height: 80px;
+      background: #10b981;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      font-size: 40px;
+    }
+
+    /* Responsivo */
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      .qr-code {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+   Vídeo de fundo 
+  <video class="video-background" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+    Seu navegador não suporta vídeos.
+  </video>
+
+   Overlay escuro 
+  <div class="overlay"></div>
+
+   Container principal 
+  <div class="container">
+    
+     
+    <div class="screen active" id="screen1">
+      <div class="card">
+        <h1>Não é cadastrado?</h1>
+        <p>Cadastre-se e comece a jogar agora mesmo, clique aqui.</p>
+        <button class="btn btn-primary" onclick="showScreen(2)">Quero me cadastrar</button>
+      </div>
+    </div>
+
+
+    <div class="screen" id="screen2">
+      <div class="card">
+        <h1>Criar sua conta</h1>
+        <p>Preencha seus dados para começar</p>
+        
+        <form id="cadastroForm">
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="sobrenome">Sobrenome</label>
+            <input type="text" id="sobrenome" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" required>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Tudo pronto</button>
+        </form>
+      </div>
+    </div>
+
+     
+    <div class="screen" id="screen3">
+      <div class="card">
+        <h1>Adicione saldo à sua carteira</h1>
+        <p>Vemos que ainda não adicionou saldo à sua carteira, mas fique tranquilo isso é rápido e fácil!</p>
+        
+        <button class="btn btn-primary" onclick="showScreen(4)">
+          Adicionar saldo mínimo (R$ 15,00)
+        </button>
+        
+        <div class="bonus-alert">
+          <p>🎁 Recarregue e ganhe 1000 rodadas extras!</p>
+        </div>
+      </div>
+    </div>
+
+      
+    <div class="screen" id="screen4">
+      <div class="card">
+        <h1>Pagamento via PIX</h1>
+        <p>Escaneie o QR Code abaixo para pagar <span class="highlight">R$ 15,00</span></p>
+        
+        <div class="qr-container">
+          <div class="qr-code">
+            <img src="qrcode.png" alt="QR Code PIX" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+        </div>
+        
+        <div class="timer" id="timer">
+          Aguardando pagamento... 02:00
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="screen" id="screen5">
+      <div class="card">
+        <div class="analysis-icon">⏳</div>
+        <h1>Conta em análise</h1>
+        <p>Isso pode demorar de 2 a 4h, verifique seus dados.</p>
+        <p style="margin-top: 20px; font-size: 14px;">Você receberá uma notificação quando sua conta estiver pronta!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Controle de telas
+    function showScreen(screenNumber) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById('screen' + screenNumber).classList.add('active');
+      
+      // Inicia timer quando chega na tela de pagamento
+      if (screenNumber === 4) {
+        startTimer();
+      }
+    }
+
+    // Validação do formulário
+    document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const sobrenome = document.getElementById('sobrenome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      
+      if (nome && sobrenome && email && senha) {
+        showScreen(3);
+      } else {
+        alert('Por favor, preencha todos os campos!');
+      }
+    });
+
+    // Timer de 2 minutos
+    function startTimer() {
+      let timeLeft = 120; // 2 minutos em segundos
+      const timerElement = document.getElementById('timer');
+      
+      const countdown = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerElement.textContent = `Aguardando pagamento... ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+          clearInterval(countdown);
+          showScreen(5);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
